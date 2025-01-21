@@ -1,31 +1,79 @@
 import * as fs from 'fs';
-import { config } from './../config/index.ts';
+import * as path from 'path';
+import { Page } from '@playwright/test';
 
 export class FileUtils {
-  constructor(private downloadPath = config.DOWNLOAD_FOLDER) {
-    if (!fs.existsSync(downloadPath)) {
-      fs.mkdirSync(downloadPath, { recursive: true });
+  private readonly downloadPath: string = './tmp';
+
+  constructor() {
+    if (!fs.existsSync(this.downloadPath)) {
+      fs.mkdirSync(this.downloadPath, { recursive: true });
     }
   }
 
-  getFileCount(): number {
-    return fs.existsSync(this.downloadPath) ? 
-      fs.readdirSync(this.downloadPath).length : 0;
-  }
+  async downloadFile(page: Page, downloadTrigger: () => Promise<void>, options = { timeout: 10000 }): Promise<string> {
+    // Create download promise before triggering the download
+    const downloadPromise = page.waitForEvent('download', { timeout: options.timeout });
 
-  async waitForNewFile(initialCount: number, timeout = 5000): Promise<void> {
-    const start = Date.now();
-    while (Date.now() - start < timeout) {
-      if (this.getFileCount() > initialCount) return;
-      await new Promise(resolve => setTimeout(resolve, 100));
+    try {
+        // Trigger the download using the provided function
+        await downloadTrigger();
+
+        const download = await downloadPromise;
+        const suggestedFilename = download.suggestedFilename();
+        const filePath = path.join(this.downloadPath, suggestedFilename);
+
+        // Wait for the download to complete and save it
+        await download.saveAs(filePath);
+
+        await this.verifyFileExists(filePath);
+
+        return suggestedFilename;
+    } catch (error) {
+        console.error('Download failed:', error);
+        throw error;
     }
-    throw new Error('No new file appeared in download directory');
   }
 
-  async cleanupDownloads(): Promise<void> {  // Changed back to cleanupDownloads
+  private async verifyFileExists(filePath: string): Promise<void> {
+    let retries = 5;
+    while (retries > 0) {
+      if (fs.existsSync(filePath)) {
+        const stats = fs.statSync(filePath);
+        if (stats.size > 0) {
+          return;
+        }
+      }
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      retries--;
+    }
+    throw new Error(`File not found or empty: ${filePath}`);
+  }
+
+  async validateDownloadedFile(page: Page, downloadTrigger: () => Promise<void>, expectedFileName: string): Promise<void> {
+    const actualFileName = await this.downloadFile(page, downloadTrigger);
+    
+    if (actualFileName !== expectedFileName) {
+      throw new Error(`Expected file name to be ${expectedFileName}, but got ${actualFileName}`);
+    }
+
+    const filePath = path.join(this.downloadPath, actualFileName);
+
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`File does not exist at path: ${filePath}`);
+    }
+
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    if (fileContent.length <= 0) {
+      throw new Error(`File is empty: ${filePath}`);
+    }
+  }
+
+  async cleanup(): Promise<void> {
     if (fs.existsSync(this.downloadPath)) {
-      fs.readdirSync(this.downloadPath).forEach(file => 
-        fs.unlinkSync(`${this.downloadPath}/${file}`));
+      fs.readdirSync(this.downloadPath).forEach(file => {
+        fs.unlinkSync(path.join(this.downloadPath, file));
+      });
     }
   }
 }

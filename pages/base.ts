@@ -15,7 +15,6 @@ export const test = base.extend<CustomFixtures>({
   fileUtils: async ({ }, use) => {
     const fileUtils = new FileUtils();
     await use(fileUtils);
-    await fileUtils.cleanupDownloads(); // Cleanup after each test
   },
   photoPage: async ({ page }, use) => {
     await use(new PhotoBoothPage(page));

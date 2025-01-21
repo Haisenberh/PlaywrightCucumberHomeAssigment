@@ -14,7 +14,7 @@ test.describe('Photo Booth page tests', () => {
     await expect(productPage.cartIsEmptyMessage).toBeVisible();
   });
   
-  test('Positive: Save photo functionality works correctly', async ({ photoPage, context }) => {
+  test('Positive: Save photo functionality works correctly', async ({ photoPage, context, fileUtils}) => {
     await photoPage.goto();
     
     // Allow usage of camera
@@ -26,7 +26,13 @@ test.describe('Photo Booth page tests', () => {
     // Wait until photo preview is visible
     await expect(photoPage.photoBoxWindow).toBeVisible();
     await expect(photoPage.savePhotoButton).toBeVisible();
-    await photoPage.savePhotoButton.click();
+
+    // Validate the downloaded report
+    const downloadTrigger = async () => await photoPage.savePhotoButton.click();
+    await fileUtils.validateDownloadedFile(photoPage.page, downloadTrigger, 'photo.png');
+
+    // cleanup
+    await fileUtils.cleanup();
   });
 
   test('Negative: Screen text validation works correctly', async ({ photoPage, context }) => {

@@ -1,7 +1,7 @@
 import { test, expect } from '../../pages/base.ts';
 
 test.describe('Reports page tests', () => {
-  test('Positive: Reports page UI', async ({ reportPage }) => {
+  test('Positive: Reports page UI', async ({ reportPage, fileUtils }) => {
     let customIncome = '1000';
     let totalIncome = customIncome;
     await reportPage.goto();
@@ -15,11 +15,13 @@ test.describe('Reports page tests', () => {
 
     const expectedRevenue = parseFloat(totalIncome) - expectedTax;
     await expect(reportPage.page.getByRole('cell', { name: `$${expectedRevenue.toFixed(2)}` })).toBeVisible();
+    await expect(reportPage.saveReportButton).toBeVisible();
 
-    // Step 5: Validate the downloaded report (optional)
-    await reportPage.validateDownloadedFile('report.csv');
+    // Validate the downloaded report
+    const downloadTrigger = async () => await reportPage.saveReportButton.click();
+    await fileUtils.validateDownloadedFile(reportPage.page, downloadTrigger, 'report.csv');
 
-    // Cleanup (if necessary, based on your environment)
-    await reportPage.cleanup();
+    // cleanup
+    await fileUtils.cleanup();
   });
 });
