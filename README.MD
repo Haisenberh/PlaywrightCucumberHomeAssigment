@@ -6,14 +6,17 @@ This test suite covers basic user flows for the Photoo Booth Web App<br/>The tes
 
 1. Node.js (version 20 or higher)
 2. NPM (version 10 or higher)
-3. Playwright should be installed. If you don't have it, you can use this command:  `npm init playwright@latest`   
+3. Playwright should be installed. If you don't have it, you can use this command:  
+```
+npm init playwright@latest
+```   
 4. Photo Booth app should be running
 
 ## Installation
 
 1. Clone the repository or download the project files.
 2. Navigate to the project directory in your terminal.
-3. Run `npm install` to install the required dependencies.
+3. Run ```npm install``` to install the required dependencies.
 
 ## Configuration of .env file
 
@@ -24,21 +27,33 @@ This test suite covers basic user flows for the Photoo Booth Web App<br/>The tes
 ## Running tests
 
 Suite contains both API and End To End Ui tests.
+
 To run the whole test suite, execute the following command in your terminal from the project directory:
 
-`npx playwright test`
+```
+npx playwright test
+```
 
 To run only API tests:
-`npx playwright test tests/api`
+```
+npx playwright test tests/api
+```
 
 To run only E2E tests:
-`npx playwright test tests/e2e`
+```
+npx playwright test tests/e2e
+```
 
 Running a single test file:
-`npx playwright test tests/e2e/products.spec.ts`
+```
+npx playwright test tests/e2e/products.spec.ts
+```
 
 ## Review results
 
-By default suite is saving index.html file to playwright-report folder
+By default suite is saving index.html file to playwright-report folder. You can save report in any suitable format, just pass needed type of file as a [argument](https://playwright.dev/docs/test-reporters)
+```
+npx playwright test tests/e2e/products.spec.ts
+```
 
 For more advanced configurations, customizations, or troubleshooting, refer to the [Playwright documentation](https://playwright.dev/docs/intro).

@@ -16,22 +16,22 @@ export class FileUtils {
     const downloadPromise = page.waitForEvent('download', { timeout: options.timeout });
 
     try {
-        // Trigger the download using the provided function
-        await downloadTrigger();
+      // Trigger the download using the provided function (e.g. clicking a Save button)
+      await downloadTrigger();
 
-        const download = await downloadPromise;
-        const suggestedFilename = download.suggestedFilename();
-        const filePath = path.join(this.downloadPath, suggestedFilename);
+      const download = await downloadPromise;
+      const suggestedFilename = download.suggestedFilename();
+      const filePath = path.join(this.downloadPath, suggestedFilename);
 
-        // Wait for the download to complete and save it
-        await download.saveAs(filePath);
+      // Wait for the download to complete and save it
+      await download.saveAs(filePath);
 
-        await this.verifyFileExists(filePath);
+      await this.verifyFileExists(filePath);
 
-        return suggestedFilename;
+      return suggestedFilename;
     } catch (error) {
-        console.error('Download failed:', error);
-        throw error;
+      console.error('Download failed:', error);
+      throw error;
     }
   }
 
@@ -52,7 +52,7 @@ export class FileUtils {
 
   async validateDownloadedFile(page: Page, downloadTrigger: () => Promise<void>, expectedFileName: string): Promise<void> {
     const actualFileName = await this.downloadFile(page, downloadTrigger);
-    
+
     if (actualFileName !== expectedFileName) {
       throw new Error(`Expected file name to be ${expectedFileName}, but got ${actualFileName}`);
     }

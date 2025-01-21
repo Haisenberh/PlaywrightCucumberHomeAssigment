@@ -2,7 +2,7 @@ import { test, expect } from '../../pages/base.ts'
 import { config } from './../../config/index.ts';
 
 test.describe('API Tests for /products endpoint', () => {
-  // Define the base URL for the API
+
   const baseUrl = config.API;
   test('Positive: GET /products API test', async ({ request }) => {
 
@@ -42,7 +42,7 @@ test.describe('API Tests for /products endpoint', () => {
       // Additional validation for the packaged "2x6"
       if (product.id === '2x6') {
         Object.entries(extraFieldsFor2x6).forEach(([key, validator]) => {
-          expect(product).toHaveProperty(key); 
+          expect(product).toHaveProperty(key);
           expect(validator(product[key])).toBeTruthy();
         });
       }

@@ -40,7 +40,8 @@ export class ReportPage {
 
   // Method to calculate and get the expected tax from the custom income
   getExpectedTax(customIncome: string): number {
-    return parseFloat((parseFloat(customIncome) * 8.625 / 100).toFixed(2));
+    const tax = 8.625;
+    return parseFloat((parseFloat(customIncome) * tax / 100).toFixed(2));
   }
 
   // Method to calculate and get the expected revenue
@@ -61,16 +62,7 @@ export class ReportPage {
     await expect(this.page.getByRole('cell', { name: `$${expectedRevenue.toFixed(2)}` })).toBeVisible();
   }
 
-  // Method to verify that the save report button is visible
   async verifySaveReportButton() {
     await expect(this.saveReportButton).toBeVisible();
-  }
-
-  // Method to trigger the download action and validate the downloaded file
-  async validateDownloadedFile(downloadTrigger: () => Promise<void>, fileName: string) {
-    await downloadTrigger();
-    await this.page.waitForEvent('download');
-    const downloadPath = `${this.downloadPath}/${fileName}`;
-    await expect(fs.existsSync(downloadPath)).toBeTruthy();
   }
 }

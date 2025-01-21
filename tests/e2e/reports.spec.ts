@@ -9,19 +9,20 @@ test.describe('Reports page tests', () => {
     await reportPage.goto();
 
     // Enter the custom income
-    await reportPage.enterCustomIncome(customIncome);
+    await reportPage.enterCustomIncome(totalIncome);
 
     // Verify that the Taxes to pay is calculated correctly
-    await reportPage.verifyTax(customIncome);
+    await reportPage.verifyTax(totalIncome);
 
     // Verify that the Revenue is calculated correctly
-    await reportPage.verifyRevenue(customIncome);
+    await reportPage.verifyRevenue(totalIncome);
 
     // Verify that the save report button is visible
     await reportPage.verifySaveReportButton();
+    // save report and validate
+    const downloadTrigger = async () => await reportPage.saveReportButton.click();
 
     // Validate the downloaded report
-    const downloadTrigger = async () => await reportPage.saveReportButton.click();
     await fileUtils.validateDownloadedFile(reportPage.page, downloadTrigger, 'report.csv');
 
     // Cleanup

@@ -2,7 +2,7 @@ import { test, expect } from '../../pages/base.ts';
 import { config } from '../../config/index.ts';
 
 test.describe('API Tests for POST /order endpoint', () => {
-  // Define the base URL for the API
+
   const baseUrl = config.API;
 
   test('Positive: POST /order API test', async ({ request }) => {
@@ -36,7 +36,7 @@ test.describe('API Tests for POST /order endpoint', () => {
     const responseBody = await response.json();
 
     // Assertions for response body
-    expect(responseBody).toHaveProperty('success'); 
+    expect(responseBody).toHaveProperty('success');
     expect(responseBody.success).toBe(true);
   });
 });
