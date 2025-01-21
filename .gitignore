@@ -1,8 +1,9 @@
 # Ignore node_modules folder
 node_modules/
 
-ignore reports folder
+ignore reports folders
 test-results/
+playwright-report/
 
 temporary files folder
 tmp/
@@ -19,3 +20,4 @@ tmp/
 # Ignore system files
 .DS_Store
 Thumbs.db
+

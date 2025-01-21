@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "1b44f474-7ad6-4627-af5f-88eb3068fc2b",
+		"name": "Server API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30371981"
+	},
+	"item": [
+		{
+			"name": "Get Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/products",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Revenue Report",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/report?month=0&year=2025",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"report"
+					],
+					"query": [
+						{
+							"key": "month",
+							"value": "0"
+						},
+						{
+							"key": "year",
+							"value": "2025"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"id\": \"6x12\",\r\n        \"price\": 700,\r\n        \"free\": true\r\n    },\r\n    {\r\n        \"id\": \"2x6\",\r\n        \"price\": 500,\r\n        \"free\": true\r\n    },\r\n    {\r\n        \"id\": \"4x6\",\r\n        \"price\": 500\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/order",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"order"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
