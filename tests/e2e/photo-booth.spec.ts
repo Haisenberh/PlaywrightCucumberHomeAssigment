@@ -13,7 +13,7 @@ test.describe('Photo Booth page tests', () => {
     // Verify save button is visible
     await expect(productPage.cartIsEmptyMessage).toBeVisible();
   });
-  
+
   test('Positive: Save photo functionality works correctly', async ({ photoPage, context, fileUtils}) => {
     await photoPage.goto();
     
@@ -40,7 +40,7 @@ test.describe('Photo Booth page tests', () => {
     // Allow usage of camera
     await context.grantPermissions(['camera']);
     await photoPage.textOnScreenInput.fill(
-      Array(31).fill(0).map(() => String.fromCharCode(33 + Math.random() * 94)).join('')
+      Array(31).fill(0).map(() => String.fromCharCode(31 + Math.random() * 94)).join('')
     );
     // assert validation message is visible
     await expect(photoPage.limitExceededValidationMessage).toBeVisible();
