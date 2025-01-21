@@ -7,9 +7,10 @@ playwright-report/
 
 temporary files folder
 tmp/
-
+.pdf
 # Ignore environment files
 .env
+.tar
 
 # Ignore logs
 *.log
