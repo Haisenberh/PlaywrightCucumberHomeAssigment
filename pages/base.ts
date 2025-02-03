@@ -1,29 +1,28 @@
 import { test as base, expect, Locator, Page } from '@playwright/test';
-import { PhotoBoothPage } from './photoPage';
-import { ProductPage } from './productPage';
-import { ReportPage } from './reportPage';
-import { FileUtils } from '../utils/fileUtils';
+import { RegistrationPage } from './registrationPage';
+import { RegistrationConfirmationPage } from './registrationConfirmationPage';
+import { LoginPage } from './loginPage';
+import { HomePage } from './homePage';
 
 type CustomFixtures = {
-  photoPage: PhotoBoothPage;
-  productPage: ProductPage;
-  reportPage: ReportPage;
-  fileUtils: FileUtils;
+  registrationPage: RegistrationPage;
+  registrationConfirmationPage: RegistrationConfirmationPage;
+  loginPage: LoginPage;
+  homePage: HomePage;
 };
 
 export const test = base.extend<CustomFixtures>({
-  fileUtils: async ({ }, use) => {
-    const fileUtils = new FileUtils();
-    await use(fileUtils);
+  registrationPage: async ({ page }, use) => {
+    await use(new RegistrationPage(page));
   },
-  photoPage: async ({ page }, use) => {
-    await use(new PhotoBoothPage(page));
+  loginPage: async ({ page }, use) => {
+    await use(new LoginPage(page));
   },
-  productPage: async ({ page }, use) => {
-    await use(new ProductPage(page));
+  homePage: async ({ page }, use) => {
+    await use(new HomePage(page));
   },
-  reportPage: async ({ page }, use) => {
-    await use(new ReportPage(page));
+  registrationConfirmationPage: async ({ page }, use) => {
+    await use(new RegistrationConfirmationPage(page));
   }
 });
 
